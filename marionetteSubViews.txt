@@ -3,7 +3,7 @@ Marionette Sub-Views
 JavaScript, JS, Marionette, Backbone, subviews, sub-views, superheros
 
 
-=The HTML=
+#The HTML
 ```html
 <div id="content"></div>
         
@@ -23,7 +23,7 @@ JavaScript, JS, Marionette, Backbone, subviews, sub-views, superheros
 </script>
 ```
 
-=The JS=
+#The JS
 // setup the data to be displayed, normally this would come from an external source
 
 var heroes = [
@@ -221,7 +221,7 @@ MyApp.addInitializer(function(options){
 MyApp.start({heroes: heroes});
 ```
 
-=Some CSS=
+#Some CSS
 ```css
 #infoContainer {
 }

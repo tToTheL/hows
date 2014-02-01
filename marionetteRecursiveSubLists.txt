@@ -5,7 +5,7 @@ marionette, JS, javascript, backbone
 
 This code is not original and is taken directly from http://jsfiddle.net/derickbailey/AdWjU/ But the example is so awesome, I just wanted to make sure I had a copy of my own
 
-=HTML=
+#HTML
 ```html
 <script id="node-template" type="text/template">
     <li><%= nodeName %></li>
@@ -15,7 +15,7 @@ This code is not original and is taken directly from http://jsfiddle.net/derickb
 </div>
 ```
 
-=JS=
+#JS
 ```js
 treeData = [
   {
@@ -127,7 +127,7 @@ treeView.render();
 $("#tree").html(treeView.el);
 ```
 
-=CSS=
+#CSS
 ```css
 ul {
   list-style: disc;
