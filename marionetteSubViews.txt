@@ -1,0 +1,251 @@
+1
+Marionette Sub-Views
+JavaScript, JS, Marionette, Backbone, subviews, sub-views, superheros
+
+
+=The HTML=
+```html
+<div id="content"></div>
+        
+<script type="text/template" id="heroInfo-template">
+    <h3><%= name %></h3>
+    <div id="infoContainer">
+        <div class="villain-region js-villain-region"></div>
+        <div class="color-region js-color-region"></div>
+        <div class="clear"></div>
+    </div>
+</script>
+
+<script type="text/template" id="blankTemplate"></script>
+    
+<script type="text/template" id="displayNameTemplate">
+    <%= name %>
+</script>
+```
+
+=The JS=
+// setup the data to be displayed, normally this would come from an external source
+
+var heroes = [
+        {
+          "id": "1",
+          "name": "Batman",
+          "info_url": "http://en.wikipedia.org/wiki/Batman",
+          "villains": [
+            {
+              "id": "100",
+              "name": "Bane",
+              "info_url": "http://en.wikipedia.org/wiki/Bane_(comics)"
+            },
+            {
+              "id": "101",
+              "name": "Ra's Al Ghul",
+              "info_url": "http://en.wikipedia.org/wiki/Ra%27s_al_Ghul"
+            },
+            {
+              "id": "102",
+              "name": "The Joker",
+              "info_url": "http://en.wikipedia.org/wiki/Joker_(comics)"
+            },
+            {
+              "id": "103",
+              "name": "The Riddler",
+              "info_url": "http://en.wikipedia.org/wiki/Riddler"
+            }
+          ],
+            "colors": [
+                {
+                    "name": "BatGreen",
+                },
+                {
+                    "name": "BatBlue",
+                }
+           ],
+        },
+        {
+          "id": "2",
+          "name": "Spider-Man",
+          "info_url": "http://en.wikipedia.org/wiki/Spider-Man",
+          "villains": [
+            {
+              "id": "200",
+              "name": "Green Goblin",
+              "info_url": "http://en.wikipedia.org/wiki/Green_Goblin"
+            },
+            {
+              "id": "201",
+              "name": "Venom",
+              "info_url": "http://en.wikipedia.org/wiki/Venom_(Marvel_Comics)"
+            }
+          ],
+            "colors": [
+                {
+                    "name": "SpidyGreen",
+                },
+                {
+                    "name": "SpidyBlue",
+                }
+           ],            
+        },
+        {
+          "id": "3",
+          "name": "Wonder Woman",
+          "info_url": "http://en.wikipedia.org/wiki/Wonderwoman",
+          "villains": [
+            {
+              "id": "300",
+              "name": "Ares",
+              "info_url": "http://en.wikipedia.org/wiki/Ares_(DC_Comics)"
+            },
+            {
+              "id": "301",
+              "name": "Doctor Psycho",
+              "info_url": "http://en.wikipedia.org/wiki/Doctor_Psycho"
+            },
+            {
+              "id": "302",
+              "name": "Silver Swan",
+              "info_url": "http://en.wikipedia.org/wiki/Silver_Swan_(comics)"
+            }
+          ],
+            "colors": [
+                {
+                    "name": "WonderGreen",
+                },
+                {
+                    "name": "WonderBlue",
+                }
+           ],            
+            
+        }
+      ]
+
+
+// start the application
+MyApp = new Backbone.Marionette.Application();
+
+// create main region everything goes in
+MyApp.addRegions({
+  mainRegion: "#content"
+});
+
+// Create Models and collections
+Villain = Backbone.Model.extend({});
+Villains = Backbone.Collection.extend({
+  model: Villain
+});
+
+Color = Backbone.Model.extend({});
+Colors = Backbone.Collection.extend({
+    model: Color
+});
+
+Hero = Backbone.Model.extend({});
+Heroes = Backbone.Collection.extend({
+  model: Hero
+});
+
+// create a view which just displays a name attribute
+simpleNameView = Backbone.Marionette.ItemView.extend({
+    template: "#displayNameTemplate",
+    tagName: "li"
+});
+
+// how each individual villain will be displayed
+VillainView = Backbone.Marionette.CollectionView.extend({
+    template: "#blankTemplate",
+    itemView: simpleNameView,
+    tagName: "ul"
+});
+
+// how each individual color will be displayed
+ColorView = Backbone.Marionette.CollectionView.extend({
+    template: "#blankTemplate",
+    itemView: simpleNameView,
+    tagName: "ul"
+});
+
+// this runs for each hero that exists
+HeroView = Backbone.Marionette.Layout.extend({
+    template: "#heroInfo-template",
+    initialize: function() {
+        // below required me to upgrade the Backbone.Marionette version
+        this.addRegion("villainRegion", this.$el.find(".js-villain-region"));  
+        this.addRegion("colorRegion", this.$el.find(".js-color-region")); 
+    },
+    onShow: function() {
+        vil = new VillainView({
+            collection: this.model.get('villains')
+        });
+        this.villainRegion.show(vil);  
+        
+        col = new ColorView({
+            collection: this.model.get('colors')
+        });
+        this.colorRegion.show(col);
+    },
+});
+
+// this controls the HeroView, which is a layout class, it ultimately tells the layout
+// to create instances of itself for each hero, though, this only happens later
+// when we instantiate it and attach a collection to it.
+HeroesView = Backbone.Marionette.CollectionView.extend({
+  id: "heroList",
+  itemView: HeroView
+});
+
+
+MyApp.addInitializer(function(options){
+    var heroes = new Heroes(options.heroes);
+        
+    // each hero's colors and villains must be a backbone collection
+    // we initialize them here
+    heroes.each(function(hero){
+        var villains = hero.get('villains');
+        var villainCollection = new Villains(villains);
+        hero.set('villains', villainCollection);
+            
+        var colors = hero.get('colors');
+        var colorCollection = new Colors(colors);
+        hero.set('colors', colorCollection);
+    });
+                
+    var heroesView = new HeroesView({
+        collection: heroes
+    });
+    
+    MyApp.mainRegion.show(heroesView);
+});
+
+// start the application, pass in the data defined at the very top
+MyApp.start({heroes: heroes});
+```
+
+=Some CSS=
+```css
+#infoContainer {
+}
+
+.villain-region {
+    width: 50%;
+    float: left;
+}
+
+.color-region {
+    float: right;
+    width: 50%;
+
+}
+
+.clear {
+    clear: both;
+}
+
+ul {
+   list-style-type: circle; 
+}
+```
+
+The JSFiddle: http://jsfiddle.net/J9EAX/10/
+
+My StackOverflow post that made this happen: http://stackoverflow.com/questions/21491039/marionettejs-multiple-nested-side-by-side-views
