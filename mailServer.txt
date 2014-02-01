@@ -2,7 +2,6 @@
 How to set up a mailserver postfix dovecot mysql
 postfix, dovecot, mysql, mail, mail server, email, linode
 
-
 This contains the import parts from https://library.linode.com/email/postfix/postfix2.9.6-dovecot2.0.19-mysql
 
 Use that link before using this file. This copy only exists as a backup. I thought it was useful to copy the important parts because of how useful this document was.

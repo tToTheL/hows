@@ -2,7 +2,6 @@
 Marionette Recursive Sublists
 marionette, JS, javascript, backbone
 
-
 This code is not original and is taken directly from http://jsfiddle.net/derickbailey/AdWjU/ But the example is so awesome, I just wanted to make sure I had a copy of my own
 
 #HTML

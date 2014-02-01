@@ -2,7 +2,6 @@
 Marionette Sub-Views
 JavaScript, JS, Marionette, Backbone, subviews, sub-views, superheros
 
-
 #The HTML
 ```html
 <div id="content"></div>
