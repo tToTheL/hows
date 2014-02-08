@@ -1,0 +1,6 @@
+1 (format version, always 1 for now)
+Title without newlines
+tags separated by commas
+
+The above is a blank line and here is markdown
+

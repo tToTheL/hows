@@ -1,0 +1,19 @@
+1
+How to reduce uWSGI memory
+uwsgi, python, memory, django, server
+
+    cheap = true
+    idle = 10
+    lazy-apps = true
+    processes = 1
+    ksm = 10
+
+some extra things to make ksm work.
+
+    echo 1 > /sys/kernel/mm/ksm/run
+
+I'm not sure what happens at a restart, the above might get wiped.
+
+if `/sys/kernel/mm/ksm/pages_shared` and/or `/sys/kernel/mm/ksm/pages_sharing` don't say `0` ksm is working
+
+more ksm info here http://uwsgi-docs.readthedocs.org/en/latest/KSM.html
