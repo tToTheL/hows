@@ -1,0 +1,7 @@
+1
+How to reduce php5-fpm memory
+php, server, memory
+
+edit `/etc/php5/fpm/pool.d/www.conf`
+
+value of pm what is important. `pm = ondemand` probably helps memory best.
